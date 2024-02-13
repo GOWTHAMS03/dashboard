@@ -1,0 +1,19 @@
+[
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "123-456-7890",
+      "password": "********",
+      "confirmPassword": "********"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "phone": "987-654-3210",
+      "password": "********",
+      "confirmPassword": "********"
+    }
+  ]
+  
