@@ -18,35 +18,17 @@ export class AuthInterceptor implements HttpInterceptor {
     private router: Router
   ) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    if (req.headers.get('No-Auth') === 'True') {
-      return next.handle(req.clone());
-    }
-
-    const token = this.userAuthService.getToken();
-
+  intercept(request: HttpRequest<any>, next: HttpHandler) {
+    const token = localStorage.getItem('token');
     if (token) {
-      req = this.addToken(req, token);
-
-      return next.handle(req).pipe(
-        catchError((err: HttpErrorResponse) => {
-          console.log(err.status);
-          if (err.status === 401) {
-            this.router.navigate(['/signin']);
-          } else if (err.status === 403) {
-            this.router.navigate(['/forbidden']);
-          }
-          return throwError("Something is wrong");
-        })
-      );
-    } else {
-      // Handle the case when there is no token available
-      this.router.navigate(['/signin']);
-      return throwError("No token available");
+      
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
+    return next.handle(request);
   }
 
   private addToken(request: HttpRequest<any>, token: string) {

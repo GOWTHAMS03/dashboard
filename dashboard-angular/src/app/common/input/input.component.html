@@ -3,8 +3,9 @@
     <input
         [attr.type]="showPassword ? 'text' : type"
         [id]="id"
-        [name]="id"
+        name="{{ name }}"
         class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        [(ngModel)]="value"
     />
     <button
         *ngIf="type === 'password'"

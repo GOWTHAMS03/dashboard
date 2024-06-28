@@ -1,53 +1,53 @@
-<section class="container flex flex-col lg:flex-row justify-center items-center lg:items-stretch min-h-screen">
 
+<section class="container flex flex-col lg:flex-row justify-center items-center lg:items-stretch min-h-screen">
     <div class="lg:w-1/2 lg:ml-4 lg:mt-10 order-1 lg:order-2">
         <img src="assets/images/signup.png" alt="sign" class="lg:w-[500px] rounded-lg lg:mx-auto lg:ml-0 lg:mr-50 md:mt-0">
     </div>
 
-    <div class="lg:w-1/2 px-4 lg:px-20 mt-10 lg:mx-40 lg:mt-40 order-2 lg:order-1 ">
+    <div class="lg:w-1/2 px-4 lg:px-20 mt-10 lg:mx-40 lg:mt-40 order-2 lg:order-1">
         <div class="mb-6">
             <h1 class="text-2xl font-bold">Sign Up</h1>
-            <p class="mt-2 text-gray-400">Let’s get you all set up so you can create your account. </p>
+            <p class="mt-2 text-gray-400">Let’s get you all set up so you can create your account.</p>
         </div>
 
-        <form #signupForm="ngForm" (ngSubmit)="signup(signupForm)" class="">
+        <form [formGroup]="signupForm" (ngSubmit)="signup()" class="">
             <div class="mb-4 flex flex-col lg:flex-row">
                 <div class="w-full lg:w-1/2 pr-2 mb-2 lg:mb-0">
-                 
-                    <app-input id="first-name" label="First Name" type="text" ngModel name="firstName" required></app-input>
+                    <label for="first-name" class="text-sm font-medium text-gray-600">First Name</label>
+                    <input id="first-name" type="text" formControlName="firstName" required class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300">
                 </div>
                 <div class="w-full lg:w-1/2 pl-2">
-                    
-                    <app-input id="last-name" label="Last Name" type="text" ngModel name="lastName" required></app-input>
+                    <label for="last-name" class="text-sm font-medium text-gray-600">Last Name</label>
+                    <input id="last-name" type="text" formControlName="lastName" required class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300">
                 </div>
             </div>
 
             <div class="mb-4 flex flex-col lg:flex-row">
                 <div class="w-full lg:w-1/2 pr-2 mb-2 lg:mb-0">
-                 
-                    <app-input id="email-input" label="Email" ngModel name="email" required></app-input>
+                    <label for="email-input" class="text-sm font-medium text-gray-600">Email</label>
+                    <input id="email-input" type="email" formControlName="email" required class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300">
                 </div>
                 <div class="w-full lg:w-1/2 pl-2">
-                   
-                    <app-input id="phone-number" label="Phone Number" type="tel" ngModel name="phoneNumber" required></app-input>
+                    <label for="phone-number" class="text-sm font-medium text-gray-600">Phone Number</label>
+                    <input id="phone-number" type="tel" formControlName="phoneNumber" required class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300">
                 </div>
             </div>
 
             <div class="mb-4">
-                
-                <app-input id="password" label="Password" type="password" [showPassword]="showPassword" (togglePassword)="togglePassword()" ngModel name="password" required></app-input>
+                <label for="password" class="text-sm font-medium text-gray-600">Password</label>
+                <input id="password" type="password" formControlName="password" required class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300">
             </div>
 
             <div class="mb-4">
-               
-                <app-input id="confirm-password" label="Confirm Password" type="password" ngModel name="confirmPassword" required></app-input>
+                <label for="confirm-password" class="text-sm font-medium text-gray-600">Confirm Password</label>
+                <input id="confirm-password" type="password" formControlName="confirmPassword" required class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300">
+                <div *ngIf="signupForm.get('confirmPassword')?.hasError('mismatch')" class="text-red-500">Passwords do not match</div>
             </div>
 
             <div class="mb-4 mt-10">
                 <app-button name="Submit" size="L" shade="D" animation="C"></app-button>
-                <p class="text-sm mt-4">Already have an account? <a href="signup" class="text-blue-500">Sign In</a></p>
+                <p class="text-sm mt-4">Already have an account? <a href="signin" class="text-blue-500">Sign In</a></p>
             </div>
         </form>
     </div>
-
 </section>

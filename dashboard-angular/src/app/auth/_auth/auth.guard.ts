@@ -1,3 +1,4 @@
+// auth.guard.ts
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
@@ -35,7 +36,9 @@ export class AuthGuard implements CanActivate {
         const match = this.userService.roleMatch(role);
 
         if (match) {
-          return true;
+        
+          this.router.navigate(['/admin']); 
+          return false; 
         } else {
           this.router.navigate(['/forbidden']);
           return false;
@@ -43,7 +46,6 @@ export class AuthGuard implements CanActivate {
       }
     }
 
-    this.router.navigate(['/signin']);
-    return false;
+    return true; 
   }
 }

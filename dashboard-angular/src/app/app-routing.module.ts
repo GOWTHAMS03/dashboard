@@ -6,31 +6,39 @@ import { SigninComponent } from './auth/signin/signin.component';
 import { ForbiddenComponent } from './auth/forbidden/forbidden.component';
 import { AdminComponent } from './auth/admin/admin.component';
 import { AuthGuard } from './auth/_auth/auth.guard';
+import { UserlistComponent } from './dashboard/userlist/userlist.component';
+
+
 
 
 const routes: Routes = [
-  {
-    path:'',
-    component:HomeComponent
-  },
+
+
+  
+  { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
+
+ 
   {
     path:'register',
-    component:SignupComponent
+    component:SignupComponent,
+     canActivate: [AuthGuard]
   },
   {
     path:'signin',
     component:SigninComponent
+    , canActivate: [AuthGuard]
   },
   {
     path: 'forbidden',
     component: ForbiddenComponent,
   },
   {
-    path: 'forAdmin',
-    component: AdminComponent,
-    canActivate: [AuthGuard], // Use the AuthGuard to protect the route
-    data: { roles: ['admin'] }, // Specify the required roles for this route
-  },
+    path:'admin',
+    component:AdminComponent
+    , canActivate: [AuthGuard]
+ 
+
+  }
 ];
 
 @NgModule({

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -19,9 +20,12 @@ import { AuthInterceptor } from './auth/_auth/auth.interceptor';
 import { UserService } from './auth/_services/user.service';
 import { ButtonComponent } from './common/button/button.component';
 import { InputComponent } from './common/input/input.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ToastrModule } from 'ngx-toastr';
 import { UserlistComponent } from './dashboard/userlist/userlist.component';
-
-
+import { EditComponent } from './dashboard/edit/edit.component';
+import { DialogpermissionComponent } from './dashboard/dialogpermission/dialogpermission.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,14 +38,21 @@ import { UserlistComponent } from './dashboard/userlist/userlist.component';
     UserComponent,
     ButtonComponent,
     InputComponent,
-    UserlistComponent
+    UserlistComponent,
+    EditComponent,
+    DialogpermissionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    NgxSpinnerModule
   ],
   providers: [
     AuthGuard,

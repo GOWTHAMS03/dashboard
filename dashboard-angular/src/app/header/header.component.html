@@ -1,28 +1,58 @@
-<header class="bg-white ">
-    <div class="px-10  py-6 flex items-center  justify-between">
+
+<header class="bg-white">
+    <div class="px-4 md:px-10 py-6 flex items-center justify-between">
         <div class="">
             <img src="assets/images/logo.png" class="h-20" alt="">
-            
         </div>
-        <div class="">
+        <div class="md:hidden">
             
-                <ul class="flex gap-8 text-lg font-medium">
-                    <a href="" class="flex justify-between "><li class="flex gap-2 items-center">Why project<span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                      </svg>
-                      </span></li></a>
-                    <a href=""><li>Solutions</li></a>
-                    <a href=""><li>Princing</li></a>
-                    <a href=""><li>Resources</li></a>
-                    
-                </ul>
-           
-    
+            <button id="menuToggle" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
         </div>
-        <div class="flex gap-4 pr-10">
-            <a href="signin"><button>sign in</button></a>
-           <a href="register"><button>sign up</button></a> 
+        <div class="hidden md:flex gap-8 text-lg font-medium">
+            <a href="" class="relative group">
+                <li class="flex gap-2 items-center">Why project
+                    <span class="hidden group-hover:block absolute top-full left-0 w-32 bg-white border border-gray-200 py-2 px-4 shadow-md rounded-md">
+                       
+                        <a href="#" class="block py-2">Submenu Item 1</a>
+                        <a href="#" class="block py-2">Submenu Item 2</a>
+                    </span>
+                </li>
+            </a>
+            <a href=""><li>Solutions</li></a>
+            <a href=""><li>Princing</li></a>
+            <a href=""><li>Resources</li></a>
+        </div>
+        <div class="hidden md:flex gap-4 pr-10">
+            <ng-container *ngIf="!userService.isAuthenticated()">
+            <a href="signin"><app-button size = 'F' shade = 'L' animation='F' name='Sign In' ></app-button></a>
+            <a href="register"><app-button size = 'F' shade = 'D' animation='F' name='Sign Up'></app-button></a>
+        </ng-container>
+        <ng-container *ngIf="userService.isAuthenticated()">
+            <a href="admin" > <app-button size = 'M' shade = 'W' animation='C' name='Admin'></app-button></a>
+          </ng-container>
         </div>
     </div>
-
+  
+    <div id="sidebar" class="hidden md:hidden fixed inset-0 bg-white  z-50">
+        <div class="flex justify-end p-4">
+            <button id="closeSidebar" class="text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-col items-center text-black w-90vw">
+           
+            <a href="" class="py-2">Why project</a>
+            <a href="" class="py-2">Solutions</a>
+            <a href="" class="py-2">Pricing</a>
+            <a href="" class="py-2">Resources</a>
+            <a href="signin" class="py-2">Sign In</a>
+            <a href="register" class="py-2">Sign Up</a>
+        </div>
+    </div>
 </header>

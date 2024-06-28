@@ -1,7 +1,8 @@
-// signup.component.ts
+
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user.service';
-import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
@@ -11,43 +12,50 @@ import { NgForm } from '@angular/forms';
 export class SignupComponent {
   showPassword = false;
   errorMessage: string = '';
+  signupForm: FormGroup;
 
-  signupData = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    password: '',
-    confirmPassword: ''
-  };
+  constructor(
+    private userService: UserService,
+    private toastr: ToastrService,
+    private fb: FormBuilder
+  ) {
+    this.signupForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+    });
+  }
 
-  constructor(private userService: UserService) {}
-
-  signup(signupForm: NgForm): void {
-    // Ensure passwords match
-    if (this.signupData.password !== this.signupData.confirmPassword) {
-      this.errorMessage = 'Passwords do not match';
+  signup(): void {
+    const passwordControl = this.signupForm.get('password')!;
+    const confirmPasswordControl = this.signupForm.get('confirmPassword')!;
+  
+    if (passwordControl.value !== confirmPasswordControl.value) {
+      confirmPasswordControl.setErrors({ 'mismatch': true });
+      this.toastr.error('Passwords do not match', 'Error');
       return;
     }
-
-    // Send the signup data to your API
-    this.userService.signup(this.signupData).subscribe(
+  
+    this.userService.signup(this.signupForm.value).subscribe(
       (response: any) => {
-        console.log('User registered successfully!', response);
-        // Handle success, e.g., redirect to login page or show a success message
+        this.toastr.success('User registered successfully!', 'Success');
+        console.log('Signup successful!', response);
       },
       (error: any) => {
         console.error('Error registering user:', error);
-
-        // Check for specific error responses from the server
+  
         if (error.status === 409) {
-          this.errorMessage = 'User with this email already exists.';
+          this.toastr.error('User with this email already exists.', 'Error');
         } else {
-          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+          this.toastr.error('An unexpected error occurred. Please try again later.', 'Error');
         }
       }
     );
   }
+  
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;

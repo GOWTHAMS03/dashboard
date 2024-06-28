@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class UserAuthService {
   constructor() {}
 
-  public setRoles(roles: any[]) {
+  public setRoles(roles: any[]): void {
     localStorage.setItem('roles', JSON.stringify(roles));
   }
 
@@ -15,7 +15,7 @@ export class UserAuthService {
     return rolesString ? JSON.parse(rolesString) : [];
   }
 
-  public setToken(jwtToken: string) {
+  public setToken(jwtToken: string): void {
     localStorage.setItem('jwtToken', jwtToken);
   }
 
@@ -23,11 +23,17 @@ export class UserAuthService {
     return localStorage.getItem('jwtToken');
   }
 
-  public clear() {
+  public clear(): void {
     localStorage.clear();
   }
 
-  public isLoggedIn() {
+  public isLoggedIn(): boolean {
     return !!this.getRoles().length && !!this.getToken();
+  }
+
+  public logout(): void {
+    this.clear();
+    localStorage.removeItem('currentUser');
+  
   }
 }

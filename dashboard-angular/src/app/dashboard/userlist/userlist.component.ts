@@ -1,45 +1,120 @@
-import { Component,OnInit } from '@angular/core';
+
+import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from '../../auth/_services/user.service';
+import { User } from '../../auth/_services/user.model'; 
+import { ToastrService } from 'ngx-toastr';
+import { DialogpermissionComponent } from '../dialogpermission/dialogpermission.component';
+import { MatDialog } from '@angular/material/dialog';
+import { interval } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-userlist',
   templateUrl: './userlist.component.html',
-  styleUrl: './userlist.component.css'
+  styleUrls: ['./userlist.component.css']
 })
-export class UserlistComponent implements OnInit {
-  users = [
-    {
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john.doe@example.com",
-      "phone": "123-456-7890",
-      "password": "********",
-      "confirmPassword": "********"
-    },
-    {
-      "firstName": "Jane",
-      "lastName": "Smith",
-      "email": "jane.smith@example.com",
-      "phone": "987-654-3210",
-      "password": "********",
-      "confirmPassword": "********"
-    }
-  ];
+export class UserlistComponent  implements OnInit {
+  users: User[] = [];
+  selectedUser: User | null = null; 
 
-  constructor() { }
+ 
+  
+  openEditModal(user: User): void {
+    this.selectedUser = { ...user };
+    console.log('Selected User:', this.selectedUser);
+    this.showModal = true;
+  }
+ 
 
+  constructor(private userService: UserService, private toastr: ToastrService, private dialog: MatDialog,private spinner: NgxSpinnerService) {}
+
+  showModal = false;
+  toggleModal(){
+    this.showModal = !this.showModal;
+  }
+  
   ngOnInit(): void {
+
+    this.loadUsers();
+    interval(5000).subscribe(() => {
+      this.loadUsers();
+    });
   }
 
-  editUser(user: any): void {
-    // Implement edit functionality here
-    console.log('Editing user:', user);
+  
+
+   openPopup(user: User): void {
+    this.selectedUser = user;
+  }
+
+  editUser( user: User): void {
+  
+    this.closePopup();
+  }
+
+  loadUsers(): void {
+
+    this.spinner.show();
+    this.userService.getUsers().subscribe(
+      (users) => {
+        this.users = users;
+        this.spinner.hide();
+      },
+      (error) => {
+        this.spinner.hide();
+        console.error('Error loading users:', error);
+       
+      }
+    );
   }
 
   deleteUser(user: any): void {
-    // Implement delete functionality here
-    const index = this.users.indexOf(user);
-    if (index !== -1) {
-      this.users.splice(index, 1);
+    const dialogRef = this.dialog.open(DialogpermissionComponent, {
+      data: {
+        title: 'Confirm Deletion',
+        message: `Are you sure you want to delete ${user.username}?`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.userService.deleteUser(user.id).subscribe(
+          () => {
+            this.toastr.success('User deleted successfully!', 'Success');
+            this.loadUsers(); 
+          },
+          (error) => {
+            console.error('Error deleting user:', error);
+           
+          }
+        );
+      }
+    });
+  }
+
+  updateUser(): void {
+    if (this.selectedUser) {
+      const updatedUser: User = { ...this.selectedUser }; 
+console.log(updatedUser)
+  
+      this.userService.updateUser(updatedUser.id, updatedUser).subscribe(
+        () => {
+          this.toastr.success('User updated successfully!', 'Success');
+          this.loadUsers();
+          this.toggleModal();
+        },
+        (error) => {
+          console.error('Error updating user:', error);
+          this.toastr.error('Failed to update user. Please try again.', 'Error');
+        }
+      );
     }
   }
+  
+  
+  closePopup(): void {
+    this.selectedUser = null;
+  }
+
+  
 }
