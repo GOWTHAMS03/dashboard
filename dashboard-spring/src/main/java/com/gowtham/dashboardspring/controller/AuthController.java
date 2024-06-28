@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +31,6 @@ import com.gowtham.dashboardspring.repository.RoleRepository;
 import com.gowtham.dashboardspring.repository.UserRepository;
 import com.gowtham.dashboardspring.security.jwt.JwtUtils;
 import com.gowtham.dashboardspring.security.services.UserDetailsImpl;
-
-import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
